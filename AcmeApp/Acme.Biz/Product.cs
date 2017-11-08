@@ -16,21 +16,17 @@ namespace Acme.Biz
         #region Constructors
         public Product()
         {
-            //var colorOptions = new string[4];
-            //colorOptions[0] = "Red";
-            //colorOptions[1] = "Expresso";
-            //colorOptions[2] = "White";
-            //colorOptions[3] = "Navy";
-            string[] colorOptions = { "Red", "Expresso", "White", "Navy" };
+            var colorOptions = new List<string>() { "Red", "Expresso", "White", "Navy" };
+            
+            //colorOptions.Add("Red");
+            //colorOptions.Add("Expresso");
+            //colorOptions.Add("White");
+            //colorOptions.Add("Navy");
+            colorOptions.Insert(2,"Purple");
+            colorOptions.Remove("White");
 
-            var brownIndex = Array.IndexOf(colorOptions, "Expresso");
-
-            colorOptions.SetValue("Blue", 3);
-
-            for (int i = 0; i < colorOptions.Length; i++)
-            {
-                Console.WriteLine(colorOptions[i].ToLower());
-            }
+            Console.WriteLine(colorOptions);
+            
 
            
             
@@ -102,8 +98,23 @@ namespace Acme.Biz
         /// </summary>
         /// <param name="markupPercent">Percent used to mark up the cost.</param>
         /// <returns></returns>
-        public decimal CalculateSuggestedPrice(decimal markupPercent) =>
-             this.Cost + (this.Cost * markupPercent / 100);
+        public OperationResult<decimal> CalculateSuggestedPrice(decimal markupPercent)
+        {
+            var message = "";
+            if (markupPercent <= 0)
+            {
+                message = "Invalid markup percentage";
+            }
+            else if(markupPercent < 10)
+            {
+                message = "Below recommended markup percentage";
+            }
+            
+            var value = this.Cost + (this.Cost * markupPercent / 100);
+            OperationResult<decimal> result = new OperationResult<decimal>(value, message);
+
+            return result;
+        }
 
         public override string ToString()
         {
