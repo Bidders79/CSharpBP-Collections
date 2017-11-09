@@ -30,20 +30,20 @@ namespace Acme.Biz
             return vendor;
         }
 
-        public T RetrieveValue<T>(string sql, T defaultValue) 
+        public T RetrieveValue<T>(string sql, T defaultValue)
         {
             T value = defaultValue;
 
             return value;
         }
 
-        public List<Vendor> Retrieve()
+        public IEnumerable<Vendor> Retrieve()
         {
-            if(vendors == null)
+            if (vendors == null)
             {
                 vendors = new List<Vendor>();
                 vendors.Add(new Vendor() { VendorId = 1, CompanyName = "ABC bla" });
-                vendors.Add(new Vendor() { VendorId = 2, CompanyName = "XYZ bla" });
+                vendors.Add(new Vendor() { VendorId = 2, CompanyName = "XYZ bla"});
             }
 
             foreach (var vendor in vendors)
@@ -52,6 +52,36 @@ namespace Acme.Biz
             }
             //Console.WriteLine(vendors[1]);
             return vendors;
+        }
+        public IEnumerable<Vendor> RetrieveAll()
+        {
+            if (vendors == null)
+            {
+                vendors = new List<Vendor>();
+                vendors.Add(new Vendor() { VendorId = 1, CompanyName = "ABC bla", Email = "test1@mail.com" });
+                vendors.Add(new Vendor() { VendorId = 2, CompanyName = "XYZ bla", Email = "test2@mail.com" });
+                vendors.Add(new Vendor() { VendorId = 10, CompanyName = "ABC2 bla Toy", Email = "test3@mail.com" });
+                vendors.Add(new Vendor() { VendorId = 15, CompanyName = "ABC64 bla Toy", Email = "test4@mail.com" });
+                vendors.Add(new Vendor() { VendorId = 25, CompanyName = "XYZ2 bla", Email = "test4@mail.com" });
+                vendors.Add(new Vendor() { VendorId = 11, CompanyName = "ABC4 bla", Email = "test5@mail.com" });
+                vendors.Add(new Vendor() { VendorId = 26, CompanyName = "XYZ2 bla", Email = "test6@mail.com" });
+                vendors.Add(new Vendor() { VendorId = 100, CompanyName = "ABC87 bla", Email = "test7@mail.com" });
+                vendors.Add(new Vendor() { VendorId = 23, CompanyName = "XYZ6 bla", Email = "test8@mail.com" });
+            }
+
+            
+            return vendors;
+        }
+        public IEnumerable<Vendor> RetrieveWithIterator()
+        {
+            //get data form database
+            this.Retrieve();
+
+            foreach(var vendor in vendors)
+            {
+                Console.WriteLine($"Vendor Id: {vendor.VendorId}");
+                yield return vendor;
+            }
         }
 
         /// <summary>
@@ -66,6 +96,8 @@ namespace Acme.Biz
             // Code that saves the vendor
 
             return success;
-        }
+        }         
+
+
     }
 }

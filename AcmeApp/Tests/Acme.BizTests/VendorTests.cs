@@ -82,7 +82,7 @@ namespace Acme.Biz.Tests
             var product = new Product(1, "Saw", "");
             var expected = new OperationResult<bool>(true,
                 "Order from Acme, Inc\r\nProduct: Saw\r\nQuantity: 12" +
-                "\r\nDeliver By: " + new DateTime(2018,10,25).ToString("d") +
+                "\r\nDeliver By: " + new DateTime(2018, 10, 25).ToString("d") +
                 "\r\nInstructions: standard delivery");
 
             // Act
@@ -141,6 +141,71 @@ namespace Acme.Biz.Tests
 
             // Assert
             Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void SendEmailTest()
+        {
+            //Act
+            var vendorRepo = new VendorRepository();
+            var vendorsCollection = vendorRepo.Retrieve();
+            var expected = new List<string>()
+            {
+                "Message sent: Important message for: ABC bla",
+                "Message sent: Important message for: XYZ bla",
+            };
+
+            var vendors = vendorsCollection.ToList();
+
+            //Arrange
+            var actual = Vendor.SendEmail(vendors, "Test Message");
+
+            //Assert
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void SendEmailTestArray()
+        {
+            //Act
+            var vendorRepo = new VendorRepository();
+            var vendorsCollection = vendorRepo.Retrieve();
+            var expected = new List<string>()
+            {
+                "Message sent: Important message for: ABC bla",
+                "Message sent: Important message for: XYZ bla",
+            };
+
+            var vendors = vendorsCollection.ToList();
+            //Arrange
+            var actual = Vendor.SendEmail(vendors, "Test Message");
+
+            //Assert
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void SendEmailTestAdd()
+        {
+            //Act
+            var vendorRepo = new VendorRepository();
+            var vendorsCollection = vendorRepo.Retrieve();
+
+
+            var vendorMaster = vendorRepo.Retrieve();
+
+            var expected = new List<string>()
+            {
+                "Message sent: Important message for: ABC bla",
+                "Message sent: Important message for: XYZ bla",
+            };
+
+            var vendors = vendorsCollection.ToList();
+            //Arrange
+            var actual = Vendor.SendEmail(vendors, "Test Message");
+
+            //Assert
+            CollectionAssert.AreEqual(expected, actual);
         }
     }
 }
